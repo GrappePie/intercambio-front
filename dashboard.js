@@ -1,18 +1,28 @@
 $( document ).ready(function() {
-	// if(!sessionStorage.getItem("token")) {
-	// 	window.open ('index.html','_self',false)
-	// }else{
-	// 	window.open ('dashboard.html','_self',false)
-	// }
+	if(sessionStorage.getItem("token")==null) location.href = 'index.html';
 });
 
 $('#logout').click(function(){
-	sessionStorage.clear();
-	window.location.here = "/";
+	sessionStorage.removeItem("token");
+    if(sessionStorage.getItem("token")==null) location.href = 'index.html';
 })
 
 
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
 
+/*
 $('#intercambioNuevo').click(function(){
 	
 	console.log(validarInputsIntercambio);
@@ -118,3 +128,4 @@ signupBtn.addEventListener('click', (e) => {
 		}
 	});
 });
+*/

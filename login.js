@@ -1,9 +1,5 @@
 $( document ).ready(function() {
-	// if(!sessionStorage.getItem("token")) {
-	// 	window.open ('index.html','_self',false)
-	// }else{
-	// 	window.open ('dashboard.html','_self',false)
-	// }
+	
 });
 
 $('#registrar').click(function(){
@@ -20,10 +16,17 @@ $('#ingreso').click(function(){
 		sessionStorage.setItem( "token", data.token)
 		$('.login').hide();
 		$('.wrapper').show();
-	  });
+	});
 })
 
 $( "#login" ).submit(function( event ) {
 	event.preventDefault();
-	console.log(event.currentTarget)
-  });
+	let json = {}
+	$.each($(this).serializeArray(),function(i,data){
+		data.name == 'email'?json.email = data.value : json.password = data.value
+	})
+	$.post( "https://intercambios-api.herokuapp.com/api/auth/ingresar",json, function( data ) {
+		sessionStorage.setItem( "token", data.token)
+		location.href = 'dashboard.html';
+	});
+});
