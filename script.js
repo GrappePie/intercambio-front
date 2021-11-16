@@ -23,23 +23,90 @@ $('.ingreso').click(function(){
 	let json = { "email": email, "password": password }
 	$.post( "http://26.181.53.212:3000/api/auth/ingresar",json, function( data ) {
 		console.log(data)
+		
+		sessionStorage.setItem( "token", data.token)
 		$('.form-structor').hide();
 		$('.wrapper').show();
 	  });
 })
 
 $('#intercambioNuevo').click(function(){
+	
+	console.log(validarInputsIntercambio);
+	if(!validarInputsIntercambio){
+
+		Swal.fire({
+			title: 'Faltan datos por llenar',
+			icon: 'warning',
+			showCancelButton: false,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Aceptar',
+		})
+		return false;
+
+	}
+
+	
 	let nombre = $(this).parent().find('.nombre').val();
-	let estatus = $(this).parent().find('.estatus').val();
 	let montoMaximo = $(this).parent().find('.montoMaximo').val();
-	let fechaMax = $(this).parent().find('.fechaMax').val();
 	let fechaIntercambio = $(this).parent().find('.fechaIntercambio').val();
 	let tema = $(this).parent().find('.tema').val();
-	let json = {"nombre": nombre,"estatus": estatus, "montoMaximo": montoMaximo, "fechaMax": fechaMax, "fechaIntercambio": fechaIntercambio, "tema": tema}
+	let json = {"nombre": nombre,"estatus": 1, "montoMaximo": montoMaximo, "fechaMax": fechaMax, "fechaIntercambio": fechaIntercambio, "tema": tema}
 	console.log(json)
+	guardarIntercambio(json)
+	
 })
+    $token = sessionStorage.getItem("token");
+	function guardarIntercambio(json){
+		
+		$.ajax({
+		url:"http://26.181.53.212:3000/api/intercambios",
+        method: 'POST',
+        headers: {
+			'x-access-token':sessionStorage.getItem("token")
+        },
+        contentType: 'application/json',
+        dataType: 'json',
+		data: JSON.stringify(json),
+		})
+	}
+	function peticionIntercambios(){
+		$.ajax({
+			url:"http://26.181.53.212:3000/api/intercambios",
+			method: 'GET',
+			headers: {
+				'x-access-token':sessionStorage.getItem("token")
+			},
+			contentType: 'application/json',
+			dataType: 'json'			,
+			success: function (response) {console.log(response)}
+			})
+
+	}
 
 
+
+	function validarInputsIntercambio(){
+		let nombre = $(this).parent().find('.nombre').val();
+		let montoMaximo = $(this).parent().find('.montoMaximo').val();
+		let fechaIntercambio = $(this).parent().find('.fechaIntercambio').val();
+		
+
+		if(nombre.length==0)
+		return false;
+
+		if(montoMaximo<=0)
+		return false;
+
+		if(fechaMax.length==0)
+		return false;
+
+		if(fechaIntercambio.length==0)
+		return false;
+
+return true;
+	}
 console.clear();
 
 const loginBtn = document.getElementById('login');
