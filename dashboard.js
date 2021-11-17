@@ -97,7 +97,7 @@ $(document).ready(function () {
 
 $("#agregar").click(function(){
 contIds = contIds ++;
-let html = '<label>Nombre</label> <input type="text" name="nombre" id="n'+contIds+'" required/> <label>Email</label><input type="text" name="email" id="e'+contIds+'" required/>'
+let html = '<label>Nombre</label> <input type="text" name="nombre" id="n'+contIds+'" required/> <label>Email</label><input type="text" name="email" id="e'+contIds+'" required/> '
 $("#participantes").append(html);
 
 })
