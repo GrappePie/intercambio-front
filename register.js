@@ -1,26 +1,43 @@
-$( document ).ready(function() {
-	// if(!sessionStorage.getItem("token")) {
-	// 	window.open ('index.html','_self',false)
-	// }else{
-	// 	window.open ('dashboard.html','_self',false)
-	// }
-});
+$(document).ready(function () {})
 
-$('#regresar').click(function(){
-	window.open ('index.html','_self',false)
+$('#regresar').click(function () {
+  window.open('index.html', '_self', false)
 })
 
-
-$('.registro').click(function(){
-	let nombre = $(this).parent().find('.name').val();
-	let email = $(this).parent().find('.email').val();
-	let alias = $(this).parent().find('.alias').val();
-	let password = $(this).parent().find('.password').val();
-	let json = {"nombre": nombre, "email": email, "password": password, "alias": alias};
-	console.log(JSON.stringify(json));
-	$.post( "https://intercambios-api.herokuapp.com/api/auth/registrar",json, function( data ) {
-		console.log(data)
-		$('.login').hide();
-		$('.wrapper').show();
-	  });
+$('#registrar').submit(function (event) {
+  event.preventDefault()
+  let json = {}
+  $.each($(this).serializeArray(), function (i, data) {
+    switch (data.name) {
+      case 'nombre':
+        json.nombre = data.value
+        break
+      case 'email':
+        json.email = data.value
+        break
+      case 'password':
+        json.password = data.value
+        break
+      case 'alias':
+        json.alias = data.value
+        break
+      default:
+        console.log('error')
+    }
+  })
+  $.post(
+    'https://intercambios-api.herokuapp.com/api/auth/registrar',
+    json,
+    function (data) {
+      console.log(data)
+      sessionStorage.setItem('token', data.token)
+      location.href = 'dashboard.html'
+    },
+  ).fail(function (error) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.responseJSON.message
+      })
+  })
 })

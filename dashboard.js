@@ -1,6 +1,105 @@
 $( document ).ready(function() {
 	if(sessionStorage.getItem("token")==null) location.href = 'index.html';
+    $.ajax({
+        url:"https://intercambios-api.herokuapp.com/api/intercambios",
+        method: 'GET',
+        headers: {
+            'x-access-token':sessionStorage.getItem("token")
+        },
+        contentType: 'application/json',
+        dataType: 'json'			,
+        success: function (response) {
+            $.each(response, function(i,data){
+                $('tbody').append(`<tr>
+                                            <td>${data.nombre}</td>
+                                            <td>${data.montoMaximo}</td>
+                                            <td>${data.fechaIntercambio}</td>
+                                            <td>${data.tema}</td>
+                                            <td>
+                                                <button class="btn borrar-btn" id="${data._id}">Borrar</button>
+                                                <button class="btn editar-btn" id="${data._id}">Editar</button>
+                                            </td>
+                                        </tr>
+            `);
+            })
+            $('.editar-btn').click(function(){
+                $.ajax({
+                    url:`https://intercambios-api.herokuapp.com/api/intercambios/${$(this).attr('id')}`,
+                    method: 'GET',
+                    headers: {
+                        'x-access-token':sessionStorage.getItem("token")
+                    },
+                    contentType: 'application/json',
+                    dataType: 'json'			,
+                    success: function (response) {
+                        console.log(response)
+                        $('#nuevo-intercambio').show();
+                        $('#intercambios-tab').hide();
+                        $('#hamster').text("Edita tu")
+                        $('#nombre').val(response.nombre);
+                        $('#montoMaximo').val(response.montoMaximo);
+                        $('#fechaIntercambio').val(response.fechaIntercambio);
+                        $('#tema').val(response.tema);
+                    }
+                })
+            })
+            
+        }
+    })
 });
+
+$('#regresar').click(function(){
+    $('#nuevo-intercambio').hide();
+    $('#intercambios-tab').show();
+    $('#nombre').val('');
+    $('#montoMaximo').val('');
+    $('#fechaIntercambio').val('');
+    $('#tema').val('');
+})
+
+$('#inter').submit(function (event) {
+    event.preventDefault()
+    let json = {}
+    $.each($(this).serializeArray(), function (i, data) {
+      switch (data.name) {
+        case 'nombre':
+          json.nombre = data.value
+          break
+        case 'montoMaximo':
+          json.montoMaximo = data.value
+          break
+        case 'fechaIntercambio':
+          json.fechaIntercambio = data.value
+          break
+        case 'tema':
+          json.tema = data.value
+          break
+        default:
+          console.log('error')
+      }
+    })
+    console.log(JSON.stringify(json))
+    $.ajax({
+        url:`https://intercambios-api.herokuapp.com/api/intercambios`,
+        method: 'POST',
+        data: json,
+        headers: {
+            'x-access-token':sessionStorage.getItem("token")
+        },
+        contentType: 'application/json',
+        dataType: 'json'			,
+        success: function (data) {
+            console.log(data)
+        }
+    }).fail(function (error) {
+        console.log(error.responseJSON)
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error.responseJSON.message
+          })
+      })
+  })
 
 $('#logout').click(function(){
 	sessionStorage.removeItem("token");
@@ -20,6 +119,11 @@ function openTab(evt, tabName) {
     }
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
+    $('#hamster').text("Nuevo")
+    $('#nombre').val('');
+    $('#montoMaximo').val('');
+    $('#fechaIntercambio').val('');
+    $('#tema').val('');
   }
 
 /*
