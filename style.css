@@ -93,7 +93,7 @@ ul {
     outline: 0;
 }
 
-/* CONTACT INFO */
+/* Formulario */
 .contact-info {
     background: #000;
 }
@@ -109,7 +109,7 @@ ul {
     margin-right: auto;
   }
 
-/* LARGE SIZE */
+/* Tamanio */
 @media(min-width: 700px) {
     body {
         padding: 0 4em;
@@ -127,14 +127,14 @@ ul {
         text-align: left;
     }
 }
-
+/* Taburacion */
 .tab {
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: #f1f1f1;
   }
   
-  /* Style the buttons inside the tab */
+  /* Estilo de los botones dentro de la pestaña */
   .tab button {
     background-color: inherit;
     float: left;
@@ -146,17 +146,17 @@ ul {
     font-size: 17px;
   }
   
-  /* Change background color of buttons on hover */
+  /* Cambiar el color de fondo de los botones al pasar el mouse */
   .tab button:hover {
     background-color: #ddd;
   }
   
-  /* Create an active/current tablink class */
+  /* Crear una clase tablink activa */
   .tab button.active {
     background-color: #ccc;
   }
   
-  /* Style the tab content */
+  /* Aplicar estilo al contenido de la pestaña */
   .tabcontent {
     display: none;
     padding: 6px 12px;
@@ -164,12 +164,46 @@ ul {
     border-top: none;
   }
 
+  /* Estilo del boton Logout */
   .tab button.logout-btn{
     background-color: #000;
     color: #fff;
   }
 
+  /* Cambiar el color de fondo del boton Logout al pasar el mouse */
   .tab button.logout-btn:hover{
     background-color: #fff;
     color: #000;
+  }
+
+  /* Tabla */
+  #intercambios {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #intercambios td, #intercambios th {
+    border: 1px solid rgb(221, 221, 221);
+    padding: 8px;
+  }
+  
+  #intercambios tr:nth-child(even){background-color: #928787;}
+  
+  
+  /*#intercambios tr:hover {background-color: #ddd;}*/
+  
+  #intercambios th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #B70E21;
+    color: white;
+  }
+
+  .btn{
+    background: #ffffff;
+    border: 0;
+    text-transform: uppercase;
+    padding: 1em;
   }
