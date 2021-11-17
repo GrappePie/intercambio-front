@@ -58,14 +58,27 @@
               <label>Tema</label>
               <input type="text" id="tema" name="tema" required/>
             </p>
+             <h3>Participantes</h3>
+            
               <table>
-                  <thead>
+                <thead>
+                  <tr><th>Nombre</th>
+                    <th>Email</th>
+                    <th>Acciones</th> </tr>
+                    <tr id="p1">
+                      <td><input type="text" name="nombre" /></td>
+                      <td><input type="text" name="email"  /></td>
+                      <td><button type="button"id="agregar">Agregar Participante</button></td>
+                    </tr>
+                </thead>
+                <tbody id="participantes">
 
-                  </thead>
-                  <tbody>
-
-                  </tbody>
+                </tbody>
               </table>
+
+
+            
+            <button type="button"id="agregar">Agregar Participante</button>
             <p class="block">
               <button type="submit">
                 Guardar

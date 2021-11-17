@@ -1,4 +1,4 @@
-$(document).ready(function () {})
+$(document).ready(function () {	if(sessionStorage.getItem("token")!=null) location.href = 'dashboard.html';})
 
 $('#regresar').click(function () {
   window.open('index.html', '_self', false)

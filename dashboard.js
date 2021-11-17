@@ -78,11 +78,11 @@ $( document ).ready(function() {
         }
     })
 });
-
+    var contIds = 1; 
 $("#agregar").click(function(){
     console.log("agregar")
     contIds = contIds ++;
-    let html = '<label>Nombre</label> <input type="text" name="nombre" id="n'+contIds+'" required/> <label>Email</label><input type="text" name="email" id="e'+contIds+'" required/>'
+    let html = '<tr> <td><input type="text" name="nombre" /></td><td><input type="text" name="email"  /></td><tr>'
     $("#participantes").append(html);
 
 })

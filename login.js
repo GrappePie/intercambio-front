@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-	
+	if(sessionStorage.getItem("token")!=null) location.href = 'dashboard.html';
 });
 
 $('#registrar').click(function(){
