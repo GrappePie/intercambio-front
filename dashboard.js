@@ -36,6 +36,7 @@ $( document ).ready(function() {
                         $('#nuevo-intercambio').show();
                         $('#intercambios-tab').hide();
                         $('#hamster').text("Edita tu")
+                        $('#id_inter').val(response._id);
                         $('#nombre').val(response.nombre);
                         $('#montoMaximo').val(response.montoMaximo);
                         $('#fechaIntercambio').val(response.fechaIntercambio);
@@ -55,11 +56,13 @@ $('#regresar').click(function(){
     $('#montoMaximo').val('');
     $('#fechaIntercambio').val('');
     $('#tema').val('');
+    $('#id_inter').val('');
 })
 
 $('#inter').submit(function (event) {
     event.preventDefault()
     let json = {}
+    let intercambio_id = ''
     $.each($(this).serializeArray(), function (i, data) {
       switch (data.name) {
         case 'nombre':
@@ -75,29 +78,52 @@ $('#inter').submit(function (event) {
           json.tema = data.value
           break
         default:
-          console.log('error')
+          intercambio_id = data.value
       }
     })
-    console.log(JSON.stringify(json))
-    $.ajax({
-        url:`http://26.181.53.212:3000/api/intercambios`,
-        method: 'POST',
-        data: json,
-        headers: {
-            'x-access-token':sessionStorage.getItem("token")
-        },
-        dataType: 'json',
-        success: function (data) {
-            location.reload();
-        }
-    }).fail(function (error) {
-        console.log(error.responseJSON)
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: error.responseJSON.message
+    if(intercambio_id){
+        console.log(json)
+        $.ajax({
+            url:`https://intercambios-api.herokuapp.com/api/intercambios/${intercambio_id}`,
+            method: 'PUT',
+            data: json,
+            headers: {
+                'x-access-token':sessionStorage.getItem("token")
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload();
+            }
+        }).fail(function (error) {
+            console.log(error.responseJSON)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.responseJSON.message
+              })
           })
-      })
+    }else{
+        $.ajax({
+            url:`https://intercambios-api.herokuapp.com/api/intercambios`,
+            method: 'POST',
+            data: json,
+            headers: {
+                'x-access-token':sessionStorage.getItem("token")
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload();
+            }
+        }).fail(function (error) {
+            console.log(error.responseJSON)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.responseJSON.message
+              })
+          })
+    }
+    
   })
 
 $('#logout').click(function(){
@@ -123,6 +149,7 @@ function openTab(evt, tabName) {
     $('#montoMaximo').val('');
     $('#fechaIntercambio').val('');
     $('#tema').val('');
+    $('#id_inter').val('');
   }
 
 /*
