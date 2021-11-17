@@ -10,7 +10,7 @@ $( document ).ready(function() {
         dataType: 'json'			,
         success: function (response) {
             $.each(response, function(i,data){
-                $('tbody').append(`<tr>
+                $('.inter-body').append(`<tr>
                                             <td>${data.nombre}</td>
                                             <td>${data.montoMaximo}</td>
                                             <td>${data.fechaIntercambio}</td>
@@ -77,14 +77,24 @@ $( document ).ready(function() {
             
         }
     })
+
+    $(".borrarParticipante").click(function(){
+        $(this).parent().parent().empty()
+        
+    })
+    
 });
     var contIds = 1; 
 $("#agregar").click(function(){
     console.log("agregar")
     contIds = contIds ++;
-    let html = '<tr> <td><input type="text" name="nombre" /></td><td><input type="text" name="email"  /></td><tr>'
+    let html = '<tr> <td><input type="text" name="nombre" /></td><td><input type="text" name="email"/></td> <td><button type="button"class="borrarParticipante">borrar</button></td><tr>'
     $("#participantes").append(html);
 
+    $(".borrarParticipante").click(function(){
+        $(this).parent().parent().empty()
+           console.log("borrar")
+    })
 })
 
 $('#regresar').click(function(){
@@ -96,6 +106,7 @@ $('#regresar').click(function(){
     $('#tema').val('');
     $('#id_inter').val('');
 })
+
 
 $('#inter').submit(function (event) {
     event.preventDefault()
