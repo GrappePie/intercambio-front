@@ -27,7 +27,10 @@ $( "#registrar" ).submit(function( event ) {
           }
 	})
 	$.post( "https://intercambios-api.herokuapp.com/api/auth/registrar",json, function( data ) {
+        console.log(data)
 		sessionStorage.setItem( "token", data.token)
 		location.href = 'dashboard.html';
-	});
+	}).fail(function(error) {
+        console.log(error.responseJSON.message)
+      });
 });
