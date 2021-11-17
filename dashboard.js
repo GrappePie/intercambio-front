@@ -80,16 +80,15 @@ $('#inter').submit(function (event) {
     })
     console.log(JSON.stringify(json))
     $.ajax({
-        url:`https://intercambios-api.herokuapp.com/api/intercambios`,
+        url:`http://26.181.53.212:3000/api/intercambios`,
         method: 'POST',
         data: json,
         headers: {
             'x-access-token':sessionStorage.getItem("token")
         },
-        contentType: 'application/json',
-        dataType: 'json'			,
+        dataType: 'json',
         success: function (data) {
-            console.log(data)
+            location.reload();
         }
     }).fail(function (error) {
         console.log(error.responseJSON)
