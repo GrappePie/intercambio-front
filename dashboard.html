@@ -7,6 +7,7 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="/style.css">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://kit.fontawesome.com/f0b1e4f767.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="tab">
@@ -30,7 +31,7 @@
                     <th>Acciones</th>
                   </tr>
             </thead>
-            <tbody>
+            <tbody class="inter-body">
             </tbody>
           </table>
       </div>
@@ -53,10 +54,46 @@
             <p>
               <label>Fecha de Intercambio</label>
               <input type="date" id="fechaIntercambio" name="fechaIntercambio" required/>
+              <button type="button" id="dateman">ProbarFecha</button>
             </p>
             <p>
               <label>Tema</label>
-              <input type="text" id="tema" name="tema" required/>
+              <select id="tema1"name="tema1">
+                <option value="0">Libre</option>
+                <option value="1">Calzones</option>
+                <option value="2">Tazas</option>
+                <option value="3">Libros</option>
+                <option value="4">Videojuegos</option>
+                <option value="5">Cuadernos</option>
+                <option value="6">Fierro viejo</option>
+                <option value="7">Peluches</option>
+                <option value="8">Laptops</option>
+                <option value="9">Camisas</option>
+              </select>
+              <select id="tema2" name="tema2">
+                <option value="0"></option>
+                <option value="1">Calzones</option>
+                <option value="2">Tazas</option>
+                <option value="3">Libros</option>
+                <option value="4">Videojuegos</option>
+                <option value="5">Cuadernos</option>
+                <option value="6">Fierro viejo</option>
+                <option value="7">Peluches</option>
+                <option value="8">Laptops</option>
+                <option value="9">Camisas</option>
+              </select>
+              <select id="tema3" name="tema3">
+                <option value="0"></option>
+                <option value="1">Calzones</option>
+                <option value="2">Tazas</option>
+                <option value="3">Libros</option>
+                <option value="4">Videojuegos</option>
+                <option value="5">Cuadernos</option>
+                <option value="6">Fierro viejo</option>
+                <option value="7">Peluches</option>
+                <option value="8">Laptops</option>
+                <option value="9">Chubucs</option>
+              </select>
             </p>
              <h3>Participantes</h3>
             
@@ -65,20 +102,16 @@
                   <tr><th>Nombre</th>
                     <th>Email</th>
                     <th>Acciones</th> </tr>
-                    <tr id="p1">
-                      <td><input type="text" name="nombre" /></td>
-                      <td><input type="text" name="email"  /></td>
-                      <td><button type="button"id="agregar">Agregar Participante</button></td>
+                    <tr id="datos-part">
+                      <td><input type="text" name="nombreP" id="agregarNombre"/></td>
+                      <td><input type="text" name="email"id="agregarEmail"/></td>
+                      <td><button class="btn" type="button"id="agregar" ><i class="fas fa-plus"></i></button></td>
                     </tr>
                 </thead>
                 <tbody id="participantes">
 
                 </tbody>
               </table>
-
-
-            
-            <button type="button"id="agregar">Agregar Participante</button>
             <p class="block">
               <button type="submit">
                 Guardar

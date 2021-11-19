@@ -1,3 +1,7 @@
+
+var WEB_URI = "https://intercambios-api.herokuapp.com"
+var LOCAL_URI = "http://26.181.53.212:3000"
+var URI = LOCAL_URI
 $(document).ready(function () {	if(sessionStorage.getItem("token")!=null) location.href = 'dashboard.html';})
 
 $('#regresar').click(function () {
@@ -26,7 +30,7 @@ $('#registrar').submit(function (event) {
     }
   })
   $.post(
-    'https://intercambios-api.herokuapp.com/api/auth/registrar',
+    `${URI}/api/auth/registrar`,
     json,
     function (data) {
       console.log(data)

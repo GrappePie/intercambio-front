@@ -207,3 +207,16 @@ ul {
     text-transform: uppercase;
     padding: 1em;
   }
+  #agregar{
+    height: 40px;
+    background: #a70c0c;
+    border-color: #f1f1f1;
+    border-radius: 1px;
+
+  }
+  #agregar:hover{
+
+    background: #f1f1f1;
+    border-color: #a70c0c;
+    border-radius: 1px;
+  }
