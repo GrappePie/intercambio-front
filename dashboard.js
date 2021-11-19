@@ -160,6 +160,7 @@ $('#regresar').click(function () {
   $("#participantes").empty()
 })
 
+
 $('#inter').submit(function (event) {
   event.preventDefault()
   let json = {}
