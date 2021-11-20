@@ -74,9 +74,11 @@ ul {
     border: none;
     background: none;
     outline: 0;
-    color: #fff;
+    color: rgb(173, 11, 11);
     border-bottom: 1px solid #d63031;
 }
+
+
 
 .contact-form form button {
     background: #B70E21;
@@ -219,4 +221,12 @@ ul {
     background: #f1f1f1;
     border-color: #a70c0c;
     border-radius: 1px;
+  }
+
+
+  input:disabled {
+    cursor: default;
+    background-color: grey;
+    color: white;
+    border-color: rgb(235 0 0);
   }

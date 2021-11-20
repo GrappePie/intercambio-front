@@ -1,6 +1,6 @@
 var WEB_URI = 'https://intercambios-api.herokuapp.com'
 var LOCAL_URI = 'http://26.181.53.212:3000'
-var URI = LOCAL_URI
+var URI = WEB_URI
 $(document).ready(function () {
   if (sessionStorage.getItem('token') == null) location.href = 'index.html'
   $.ajax({
@@ -12,18 +12,73 @@ $(document).ready(function () {
     contentType: 'application/json',
     dataType: 'json',
     success: function (response) {
-      $.each(response, function (i, data) {
-        $('.inter-body').append(`<tr>
-                                            <td>${data.nombre}</td>
-                                            <td>${data.montoMaximo}</td>
-                                            <td>${data.fechaIntercambio}</td>
-                                            <td>${data.tema1}-${data.tema2}-${data.tema3}</td>
-                                            <td>
-                                                <button class="btn borrar-btn" id="${data._id}">Borrar</button>
-                                                <button class="btn editar-btn" id="${data._id}">Editar</button>
-                                            </td>
-                                        </tr>
-            `)
+    
+     
+
+      console.log(response.intercambios)
+      let cont= 0;
+      let estatus = "";
+      $.each(response.intercambios, function (i, data) {
+
+        switch(data.estatus){
+          case 0 :
+            estatus ="en curso"
+            break;
+
+            case 1 :
+            estatus ="Pendiente"
+            break;
+
+            case 2 :
+            estatus ="por concretar"
+            break;
+
+
+        }
+        console.log(data);
+        let tema1 = temas(data.tema1)
+        let tema2 = temas(data.tema2)
+        let tema3 = temas(data.tema3)
+        if(data.tema1 == 0 ){
+          $('.inter-body').append(`<tr>
+          <td>${data.nombre}</td>
+          <td>${data.montoMaximo}</td>
+          <td>${data.fechaIntercambio}</td>
+          <td>${tema1}</td>
+          <td>
+              <button class="btn eliminar borrar-btn" id="${data._id}">Borrar</button>
+              <button class="btn editar-btn" id="${data._id}">Editar</button>
+              <button class="btn ver-btn" id="${data._id}">Ver</button>
+          </td>
+          <td>${estatus}</td>
+      </tr>`)
+        }else{
+
+          switch(data.estatus){
+            case 0 :
+              estatus ="en curso"
+              break;
+  
+              case 1 :
+              estatus ="Pendiente"
+              break;
+  
+              case 2 :
+              estatus ="por concretar"
+              break;}
+  
+          $('.inter-body').append(`<tr>
+        <td>${data.nombre}</td>
+        <td>${data.montoMaximo}</td>
+        <td>${data.fechaIntercambio}</td>
+        <td>${tema1} ${tema2} ${tema3}</td>
+        <td>
+            <button class="btn eliminar borrar-btn" id="${data._id}">Borrar</button>
+            <button class="btn editar-btn" id="${data._id}">Editar</button>
+            <button class="btn ver-btn" id="${data._id}">Ver</button>
+        </td>
+        <td>${estatus}</td>
+    </tr>`)}   
       })
 
       $('.editar-btn').click(function () {
@@ -38,10 +93,13 @@ $(document).ready(function () {
           success: function (response) {
             console.log(response)
             $('#nuevo-intercambio').show()
+            
             $('#intercambios-tab').hide()
             $('#hamster').text('Edita tu')
             $('#id_inter').val(response._id)
             $('#nombre').val(response.nombre)
+            $('#nombre').attr("disabled")
+
             $('#montoMaximo').val(response.montoMaximo)
             $('#fechaIntercambio').val(response.fechaIntercambio)
             $('#tema1').val(response.tema1)
@@ -58,12 +116,68 @@ $(document).ready(function () {
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function (r) {
+                  console.log(r)
                   $('#participantes').append(`<tr id="${r._id}">
                                                 <td>${r.nombre}</td>
                                                 <td>${r.email}</td>
                                                 <td>
                                                     <button class="btn borrar-btn" onClick="$(this).parent().parent().remove();"><i class="fas fa-user-minus"></i></button>
                                                 </td>
+                                            </tr>`)
+                },
+              })
+            })
+          },
+        })
+      })
+
+      $('.ver-btn').click(function () {
+        $.ajax({
+          url: `${URI}/api/intercambios/${$(this).attr('id')}`,
+          method: 'GET',
+          headers: {
+            'x-access-token': sessionStorage.getItem('token'),
+          },
+          contentType: 'application/json',
+          dataType: 'json',
+          success: function (response) {
+            console.log(response)
+            $('#nuevo-intercambio').show()
+            $('#intercambios-tab').hide()
+            $('#hamster').text('Ver')
+            $('#id_inter').val(response._id)
+            $('#nombre').val(response.nombre)
+            $('#montoMaximo').val(response.montoMaximo)
+            $('#fechaIntercambio').val(response.fechaIntercambio)   
+            $('#tema1').val(response.tema1)  
+            $('#tema2').val(response.tema2) 
+            $('#tema3').val(response.tema3)
+            $('#nombre').attr("disabled" ,"true")
+            $('#montoMaximo').attr("disabled" ,"true")
+            $('#fechaIntercambio').attr("disabled" ,"true")
+            $('#tema1').attr("disabled" ,"true")
+            $('#tema3').attr("disabled" ,"true")
+            $('#tema2').attr("disabled" ,"true")
+            $("#datos-part").hide();
+            
+
+
+            var par = ''
+            $.each(response.participantes, function (x, y) {
+              $.ajax({
+                url: `${URI}/api/participantes/${y}`,
+                method: 'GET',
+                headers: {
+                  'x-access-token': sessionStorage.getItem('token'),
+                },
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (r) {
+                  console.log(r)
+                  $('#participantes').append(`<tr id="${r._id}">
+                                                <td>${r.nombre}</td>
+                                                <td>${r.email}</td>
+                                              
                                             </tr>`)
                 },
               })
@@ -135,9 +249,10 @@ $('#agregar').click(function () {
         : (info.email = data.value)
     })
 
-  $('#participantes').append(`<tr >
+  $('#participantes').append(`<tr>
                                     <td>${info.nombreP}</td>
                                     <td>${info.email}</td>
+                                    
                                     <td>
                                         <button class="btn borrar-btn" onClick="$(this).parent().parent().remove();"><i class="fas fa-user-minus"></i></button>
                                     </td>
@@ -147,7 +262,86 @@ $('#agregar').click(function () {
   $('#agregarEmail').val('')
 })
 
+/*
+$(".editar-btn").click(function () {
+  console.log("EDITAR")
+  $(this).parent().parent().find(".name").hide()
+  $(this).parent().parent().find(".email").hide()
+  $(this).parent().parent().find(".editNombre").show();
+  $(this).parent().parent().find(".editEmail").show();
+  $(this).addClass("aceptar-btn");
+  $(this).removeClass("editar-btn"); 
+
+})
+$(".aceptar-btn").click(function name() {
+  $(this).parent().parent().find(".name").text("");
+  $(this).parent().parent().find(".name").text($(this).parent().parent().find(".editNombre").val());  
+  $(this).parent().parent().find(".name").show()
+
+
+  $(this).parent().parent().find(".email").text("")
+  $(this).parent().parent().find(".email").text($(this).parent().parent().find(".editNombre").val());
+  $(this).parent().parent().find(".email").show()
+
+  $(this).parent().parent().find(".editNombre").hide();
+  $(this).parent().parent().find(".editEmail").hide();
+  
+  $(this).addClass("aceptar-btn");
+  $(this).removeClass("editar-btn"); 
+
+})*/
+
+
+function  temas(tema) {
+
+  switch(tema) {
+    case 0:
+      return "Libre"
+     break;
+    case 1:
+      return "Calzones"
+     break;
+    case 2:
+      return "Tazas"
+     break;
+    case 3:
+      return "Libros"
+     break;
+    case 4:
+      return "Videojuegos"
+     break;
+    case 5:
+      return "Cuadernos"
+     break;
+    case 6:
+      return "Fierro"
+     break;
+    case 7:
+      return "Peluches"
+     break;
+    case 8:
+      return "Laptops"
+     break;
+     case 9:
+      return "Camisas"
+     break;
+     
+     default:
+       return "libre";
+    
+
+  } 
+}
+
 $('#regresar').click(function () {
+  console.log("regresar")
+  $("#nombre").removeAttr("disabled")
+  $('#montoMaximo').removeAttr("disabled")
+  $('#fechaIntercambio').removeAttr("disabled")
+  $('#tema3').removeAttr("disabled")
+  $('#tema2').removeAttr("disabled")
+  $("#datos-part").show();
+  
   $('#nuevo-intercambio').hide()
   $('#intercambios-tab').show()
   $('#nombre').val('')
@@ -164,6 +358,7 @@ $('#regresar').click(function () {
 $('#inter').submit(function (event) {
   event.preventDefault()
   let json = {}
+  json.estatus = 1
   let intercambio_id = ''
   if (!validar()) {
     console.log('validaciones false')
@@ -381,6 +576,12 @@ function openTab(evt, tabName) {
   $('#tema3').val('')
   $('#id_inter').val('')
   $("#participantes").empty()
+  $("#nombre").removeAttr("disabled")
+  $('#montoMaximo').removeAttr("disabled")
+  $('#fechaIntercambio').removeAttr("disabled")
+  $('#tema3').removeAttr("disabled")
+  $('#tema2').removeAttr("disabled")
+  $("#datos-part").show();
 }
 
 //prueba para logica de intercambio
