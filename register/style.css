@@ -1,0 +1,232 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #181818;
+    color: #fff;
+    line-height: 1.6;
+    font-family: 'Quicksand', sans-serif;
+    padding: 0 1.5em;
+}
+
+.container {
+    max-width: 1170px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5em;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+.logo {
+    text-align: center;
+    font-size: 3em;
+}
+
+.logo span {
+    color: #B70E21;
+}
+.btn{
+    margin-top: 1em;
+}
+.contact-wrapper {
+    box-shadow: 0 0 20px 0 rgba(255, 255, 255, .3);
+}
+
+.contact-wrapper > * {
+    padding: 1em;
+}
+
+.contact-form {
+    background: #222222;
+}
+
+.contact-form form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.contact-form form label {
+    display: block;
+}
+
+.contact-form form p {
+    margin: 0;
+    padding: 1em;
+}
+
+.contact-form form .block {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.contact-form form button,
+.contact-form form input,
+.contact-form form textarea {
+    width: 100%;
+    padding: .7em;
+    border: none;
+    background: none;
+    outline: 0;
+    color: rgb(173, 11, 11);
+    border-bottom: 1px solid #d63031;
+}
+
+
+
+.contact-form form button {
+    background: #B70E21;
+    border: 0;
+    text-transform: uppercase;
+    padding: 1em;
+}
+
+.contact-form form button:hover,
+.contact-form form button:focus {
+    background: #d63031;
+    color: #fff;
+    transition: background-color 1s ease-out;
+    outline: 0;
+}
+
+/* Formulario */
+.contact-info {
+    background: #000;
+}
+
+.contact-info h4, .contact-info ul, .contact-info p {
+    text-align: center;
+    margin: 0 0 1rem 0;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+/* Tamanio */
+@media(min-width: 700px) {
+    body {
+        padding: 0 4em;
+    }
+    .contact-wrapper {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+    }
+    .contact-wrapper > * {
+        padding: 2em;
+    }
+    .contact-info h4,
+    .contact-info ul,
+    .contact-info p {
+        text-align: left;
+    }
+}
+/* Taburacion */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+  }
+  
+  /* Estilo de los botones dentro de la pestaña */
+  .tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+  }
+  
+  /* Cambiar el color de fondo de los botones al pasar el mouse */
+  .tab button:hover {
+    background-color: #ddd;
+  }
+  
+  /* Crear una clase tablink activa */
+  .tab button.active {
+    background-color: #ccc;
+  }
+  
+  /* Aplicar estilo al contenido de la pestaña */
+  .tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+  }
+
+  /* Estilo del boton Logout */
+  .tab button.logout-btn{
+    background-color: #000;
+    color: #fff;
+  }
+
+  /* Cambiar el color de fondo del boton Logout al pasar el mouse */
+  .tab button.logout-btn:hover{
+    background-color: #fff;
+    color: #000;
+  }
+
+  /* Tabla */
+  #intercambios {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #intercambios td, #intercambios th {
+    border: 1px solid rgb(221, 221, 221);
+    padding: 8px;
+  }
+  
+  #intercambios tr:nth-child(even){background-color: #928787;}
+  
+  
+  /*#intercambios tr:hover {background-color: #ddd;}*/
+  
+  #intercambios th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #B70E21;
+    color: white;
+  }
+
+  .btn{
+    background: #ffffff;
+    border: 0;
+    text-transform: uppercase;
+    padding: 1em;
+  }
+  #agregar{
+    height: 40px;
+    background: #a70c0c;
+    border-color: #f1f1f1;
+    border-radius: 1px;
+
+  }
+  #agregar:hover{
+
+    background: #f1f1f1;
+    border-color: #a70c0c;
+    border-radius: 1px;
+  }
+
+
+  input:disabled {
+    cursor: default;
+    background-color: grey;
+    color: white;
+    border-color: rgb(235 0 0);
+  }

@@ -2,7 +2,7 @@
 var WEB_URI = "https://intercambios-api.herokuapp.com"
 var LOCAL_URI = "http://26.181.53.212:3000"
 var URI = WEB_URI
-$(document).ready(function () {	if(sessionStorage.getItem("token")!=null) location.href = 'dashboard.html';})
+$(document).ready(function () {	if(sessionStorage.getItem("token")!=null) location.href = '../dashboard/dashboard.html';})
 
 $('#regresar').click(function () {
   window.open('index.html', '_self', false)
