@@ -552,7 +552,7 @@ function validar() {
 }
 $('#logout').click(function () {
   sessionStorage.removeItem('token')
-  if (sessionStorage.getItem('token') == null) location.href = 'index.html'
+  if (sessionStorage.getItem('token') == null) location.href = '../index.html'
 })
 
 function openTab(evt, tabName) {

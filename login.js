@@ -6,7 +6,7 @@ $( document ).ready(function() {
 });
 
 $('#registrar').click(function(){
-	window.open ('register.html','_self',false)
+	window.open ('./register/register.html','_self',false)
 })
 
 $( "#login" ).submit(function( event ) {
@@ -17,7 +17,7 @@ $( "#login" ).submit(function( event ) {
 	})
 	$.post( `${URI}/api/auth/ingresar`,json, function( data ) {
 		sessionStorage.setItem( "token", data.token)
-		location.href = 'dashboard.html';
+		location.href = './dashboard/dashboard.html';
 	
 	});
 });

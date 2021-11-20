@@ -5,7 +5,7 @@ var URI = WEB_URI
 $(document).ready(function () {	if(sessionStorage.getItem("token")!=null) location.href = '../dashboard/dashboard.html';})
 
 $('#regresar').click(function () {
-  window.open('index.html', '_self', false)
+  window.open('../index.html', '_self', false)
 })
 
 $('#registrar').submit(function (event) {
@@ -35,7 +35,7 @@ $('#registrar').submit(function (event) {
     function (data) {
       console.log(data)
       sessionStorage.setItem('token', data.token)
-      location.href = 'dashboard.html'
+      location.href = '../dashboard/dashboard.html'
     },
   ).fail(function (error) {
     Swal.fire({
