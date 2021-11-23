@@ -1,5 +1,4 @@
 var WEB_URI = "https://intercambios-api.herokuapp.com"
-var LOCAL_URI = "http://26.181.53.212:3000"
 var LOCAL_HOST = 'http://localhost:3000'
 var URI = WEB_URI
 $( document ).ready(function() {

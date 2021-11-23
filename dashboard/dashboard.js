@@ -1,9 +1,9 @@
 var WEB_URI = 'https://intercambios-api.herokuapp.com'
-var LOCAL_URI = 'http://26.181.53.212:3000'
 var LOCAL_HOST = 'http://localhost:3000'
 var URI = WEB_URI
 $(document).ready(function () {
   if (sessionStorage.getItem('token') == null) location.href = '../index.html'
+  var confetti = Snow.init();
   $.ajax({
     url: `${URI}/api/intercambios`,
     method: 'GET',
@@ -687,3 +687,66 @@ function openTab(evt, tabName) {
 }
 
 
+var Snow = {
+  el: "#particles", 
+  density: 10000, // mayor = menos particulas
+  maxHSpeed: 5, // cuanto quieres que se muevan horizontalmente
+  minFallSpeed: 1,
+	canvas: null,
+	ctx: null, 
+  particles: [],
+  colors: [],
+  mp: 1,
+  quit: false,
+  init(){
+    this.canvas = document.querySelector(this.el);
+    this.ctx = this.canvas.getContext("2d");
+    this.reset();
+    requestAnimationFrame(this.render.bind(this));
+    window.addEventListener("resize", this.reset.bind(this));
+  },
+  reset(){
+    this.w = window.innerWidth;
+    this.h = window.innerHeight;
+    this.canvas.width = this.w;
+    this.canvas.height = this.h;
+    this.particles = [];
+    this.mp = Math.ceil(this.w * this.h / this.density);
+		for(var i = 0; i < this.mp; i++)
+		{
+			var size = Math.random()*4+5;
+			this.particles.push({
+				x: Math.random()*this.w, //coordenadas-x
+				y: Math.random()*this.h, //coordenadas-y
+				w: size,
+				h: size,
+				vy: this.minFallSpeed + Math.random(), //densidad
+				vx:(Math.random()*this.maxHSpeed) - this.maxHSpeed/2,
+				fill: "#ffffff",
+				s: (Math.random() * 0.2) - 0.1
+			});
+		}
+  },
+  
+  render(){
+		this.ctx.clearRect(0, 0, this.w, this.h);
+		this.particles.forEach((p,i) => {
+      p.y += p.vy;
+			p.x += p.vx;
+			this.ctx.fillStyle = p.fill;
+			this.ctx.fillRect(p.x, p.y, p.w, p.h);
+      if(p.x > this.w+5 || p.x < -5 || p.y > this.h){
+        p.x = Math.random()*this.w;
+        p.y = -10;
+			}
+    });
+    if(this.quit){
+      return;
+    }
+		requestAnimationFrame(this.render.bind(this));
+  },
+  destroy(){
+    this.quit = true;
+  }
+	
+};
