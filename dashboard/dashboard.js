@@ -1,7 +1,7 @@
 var WEB_URI = 'https://intercambios-api.herokuapp.com'
 var LOCAL_URI = 'http://26.181.53.212:3000'
 var LOCAL_HOST = 'http://localhost:3000'
-var URI = LOCAL_HOST
+var URI = WEB_URI
 $(document).ready(function () {
   if (sessionStorage.getItem('token') == null) location.href = '../index.html'
   $.ajax({
@@ -396,6 +396,22 @@ $('#regresar').click(function () {
   $("#saveInter").show();
 })
 
+$("#tema1").on("change", function(){
+  console.log()
+if($(this).val()==0){
+  $("#tema2").val(0)
+  $("#tema3").val(0)
+  $("#tema2").attr("disabled","true")
+  $("#tema3").attr("disabled","true")
+
+}else{
+  $("#tema2").removeAttr("disabled")
+  $("#tema3").removeAttr("disabled")
+}
+
+
+})
+
 
 $('#inter').submit(function (event) {
   event.preventDefault()
@@ -569,6 +585,16 @@ $('#dateman').click(function () {
 })
 function validar() {
   let err = 0
+  if($("#tema3").val() !=0 &&$("#tema3").val()!=0)
+  if(($("#tema1").val() == $("#tema2").val()== $("#tema3").val())||($("#tema2").val() == $("#tema1").val())||($("#tema3").val() == $("#tema1").val())||($("#tema3").val() == $("#tema2").val())){
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Temas iguales',
+      text: 'No puedes repetir temas',
+    })
+    err++
+  }
   if ($('#nombre').val().length == 0) {
     Swal.fire({
       icon: 'error',
