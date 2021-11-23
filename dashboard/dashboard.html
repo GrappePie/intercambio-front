@@ -17,6 +17,7 @@
       </div>
       
       <div id="intercambios-tab" class="tabcontent" style="display: block;">
+        <h3 class="logo" style="font-size:x-large;"><span>Hola </span><b id="nombreUsuario"></b></h3>
         <h1 class="logo">
             Tus
             <span>intercambios</span>
@@ -55,7 +56,7 @@
             <p>
               <label>Fecha de Intercambio</label>
               <input type="date" id="fechaIntercambio" name="fechaIntercambio" required/>
-              <button type="button" id="dateman">ProbarFecha</button>
+    
             </p>
             <p>
               <label>Tema</label>
@@ -102,7 +103,7 @@
                 <thead>
                   <tr><th>Nombre</th>
                     <th>Email</th>
-                    <th>Acciones</th> </tr>
+                    <th id="acciones">Acciones</th> </tr>
                     <tr id="datos-part">
                       <td><input type="text" name="nombreP" id="agregarNombre"/></td>
                       <td><input type="text" name="email"id="agregarEmail"/></td>
@@ -113,7 +114,7 @@
              
               </table>
             <p class="block">
-              <button type="submit">
+              <button id="saveInter" type="submit">
                 Guardar
               </button>
               <button type="button" id="regresar">

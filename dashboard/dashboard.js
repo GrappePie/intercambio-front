@@ -1,6 +1,7 @@
 var WEB_URI = 'https://intercambios-api.herokuapp.com'
 var LOCAL_URI = 'http://26.181.53.212:3000'
-var URI = WEB_URI
+var LOCAL_HOST = 'http://localhost:3000'
+var URI = LOCAL_HOST
 $(document).ready(function () {
   if (sessionStorage.getItem('token') == null) location.href = '../index.html'
   $.ajax({
@@ -16,6 +17,8 @@ $(document).ready(function () {
      
 
       console.log(response.intercambios)
+      console.log(response.user)
+      $("#nombreUsuario").text(response.user);
       let cont= 0;
       let estatus = "";
       $.each(response.intercambios, function (i, data) {
@@ -33,7 +36,6 @@ $(document).ready(function () {
             estatus ="por concretar"
             break;
 
-
         }
         console.log(data);
         let tema1 = temas(data.tema1)
@@ -46,12 +48,14 @@ $(document).ready(function () {
           <td>${data.fechaIntercambio}</td>
           <td>${tema1}</td>
           <td>
-              <button class="btn eliminar borrar-btn" id="${data._id}">Borrar</button>
-              <button class="btn editar-btn" id="${data._id}">Editar</button>
-              <button class="btn ver-btn" id="${data._id}">Ver</button>
-          </td>
-          <td>${estatus}</td>
-      </tr>`)
+            <button class="btn eliminar borrar-btn" style='background-color:red;color:white;' id="${data._id}">Borrar</button>
+            ${data.estatus==0 ? "": ` <button class="btn editar-btn" id="${data._id}">Editar</button> `}
+            <button class="btn ver-btn" id="${data._id}">Ver</button>
+            ${data.estatus==0 ? "": ` <button class="btn iniciar" style='background-color:green;color:white;' id="${data._id}">Iniciar</button> `}
+            
+        </td>
+        <td>${estatus}</td>
+    </tr>`)
         }else{
 
           switch(data.estatus){
@@ -71,11 +75,12 @@ $(document).ready(function () {
         <td>${data.nombre}</td>
         <td>${data.montoMaximo}</td>
         <td>${data.fechaIntercambio}</td>
-        <td>${tema1} ${tema2} ${tema3}</td>
+        <td>${tema1}-${tema2}-${tema3}</td>
         <td>
-            <button class="btn eliminar borrar-btn" id="${data._id}">Borrar</button>
-            <button class="btn editar-btn" id="${data._id}">Editar</button>
+            <button class="btn eliminar borrar-btn" style='background-color:red;color:white;' id="${data._id}">Borrar</button>
+            ${data.estatus==0 ? "": ` <button class="btn editar-btn" id="${data._id}">Editar</button> `}
             <button class="btn ver-btn" id="${data._id}">Ver</button>
+            ${data.estatus==0 ? "": ` <button class="btn iniciar" style='background-color:green;color:white;' id="${data._id}">Iniciar</button> `}
         </td>
         <td>${estatus}</td>
     </tr>`)}   
@@ -159,7 +164,9 @@ $(document).ready(function () {
             $('#tema3').attr("disabled" ,"true")
             $('#tema2').attr("disabled" ,"true")
             $("#datos-part").hide();
-            
+            $("#acciones").empty();
+            $("#acciones").text("Estatus")
+            $("#saveInter").hide();
 
 
             var par = ''
@@ -173,11 +180,33 @@ $(document).ready(function () {
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function (r) {
+                  let estatus ="";
+                  let color ="style='color:'"
+                  switch(r.estatus){
+                    case 0:
+                      estatus = "Rechazado"
+                      color ="style='color:red;'"
+                      break;
+                    case 1:
+                      estatus = "Pendiente"
+                      color ="style='color:yellow;'"
+                      break;
+                    case 2: 
+                    estatus = "Aceptado";
+                    color ="style='color:green;'"
+                    break;
+                    
+                    default:
+                      estatus="Pendiente"
+                      break;
+                      
+
+                  }
                   console.log(r)
                   $('#participantes').append(`<tr id="${r._id}">
                                                 <td>${r.nombre}</td>
                                                 <td>${r.email}</td>
-                                              
+                                                <td ${color}>${estatus}</td>
                                             </tr>`)
                 },
               })
@@ -208,6 +237,45 @@ $(document).ready(function () {
                   location.reload()
                 })
               },
+            })
+          }
+        })
+      })
+
+
+      $(".iniciar").click(function(){
+        console.log($(this).attr('id'));
+        Swal.fire({
+          title: '¿Quieres iniciar este intercambio?',
+          showCancelButton: true,
+          text: 'Una vez iniciado no se podra modificar',
+          confirmButtonText: 'Iniciar',
+          denyButtonText: `Cancelar`,
+        }).then((result) => {
+          console.log(`${URI}/api/intercambios/comenzar/${$(this).attr('id')}`);
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            $.ajax({
+              url: `${URI}/api/intercambios/comenzar/${$(this).attr('id')}`,
+              method: 'PUT',
+              headers: {
+                'x-access-token': sessionStorage.getItem('token'),
+              },
+              contentType: 'application/json',
+              dataType: 'json',
+              success: function (response) {
+                Swal.fire('Iniciado!', '', 'success').then((result) => {
+                  location.reload()
+                })
+              },
+            }).fail(function(e){
+              console.log(e)
+              Swal.fire({
+                icon: 'error',
+                title: 'No se puede iniciar',
+                text: e.responseJSON.message,
+              })
+
             })
           }
         })
@@ -262,34 +330,6 @@ $('#agregar').click(function () {
   $('#agregarEmail').val('')
 })
 
-/*
-$(".editar-btn").click(function () {
-  console.log("EDITAR")
-  $(this).parent().parent().find(".name").hide()
-  $(this).parent().parent().find(".email").hide()
-  $(this).parent().parent().find(".editNombre").show();
-  $(this).parent().parent().find(".editEmail").show();
-  $(this).addClass("aceptar-btn");
-  $(this).removeClass("editar-btn"); 
-
-})
-$(".aceptar-btn").click(function name() {
-  $(this).parent().parent().find(".name").text("");
-  $(this).parent().parent().find(".name").text($(this).parent().parent().find(".editNombre").val());  
-  $(this).parent().parent().find(".name").show()
-
-
-  $(this).parent().parent().find(".email").text("")
-  $(this).parent().parent().find(".email").text($(this).parent().parent().find(".editNombre").val());
-  $(this).parent().parent().find(".email").show()
-
-  $(this).parent().parent().find(".editNombre").hide();
-  $(this).parent().parent().find(".editEmail").hide();
-  
-  $(this).addClass("aceptar-btn");
-  $(this).removeClass("editar-btn"); 
-
-})*/
 
 
 function  temas(tema) {
@@ -314,7 +354,7 @@ function  temas(tema) {
       return "Cuadernos"
      break;
     case 6:
-      return "Fierro"
+      return "Fierro viejo"
      break;
     case 7:
       return "Peluches"
@@ -338,10 +378,11 @@ $('#regresar').click(function () {
   $("#nombre").removeAttr("disabled")
   $('#montoMaximo').removeAttr("disabled")
   $('#fechaIntercambio').removeAttr("disabled")
+  $('#tema1').removeAttr("disabled")
   $('#tema3').removeAttr("disabled")
   $('#tema2').removeAttr("disabled")
   $("#datos-part").show();
-  
+  $("#saveInter").hide();
   $('#nuevo-intercambio').hide()
   $('#intercambios-tab').show()
   $('#nombre').val('')
@@ -352,6 +393,7 @@ $('#regresar').click(function () {
   $('#tema3').val('')
   $('#id_inter').val('')
   $("#participantes").empty()
+  $("#saveInter").show();
 })
 
 
@@ -396,47 +438,66 @@ $('#inter').submit(function (event) {
   })
   if (intercambio_id) {
     ///EDITAR
-    $.ajax({
-      url: `${URI}/api/intercambios/${intercambio_id}`,
-      method: 'PUT',
-      data: json,
-      headers: {
-        'x-access-token': sessionStorage.getItem('token'),
-      },
-      dataType: 'json',
-      success: function (interc) {
-        $.each($('#participantes tr'), function (i, data) {
-            let participante = `{"intercambio":"${
-              interc._id
-            }","estatus": 1,"nombre":"${data.innerText
-              .replace('\t', '","email":"')
-              .replace('\t', '"}')}`
-              console.log("JSOOOOOOOOOOOOOOOOOOON:",JSON.parse(participante))
-            $.ajax({
-              url: `${URI}/api/participantes`,
-              method: 'POST',
-              data: JSON.parse(participante),
-              headers: {
-                'x-access-token': sessionStorage.getItem('token'),
-              },
-              dataType: 'json',
-              success: function (parti) {
-                console.log(parti)
-              },
-            })
+
+    Swal.fire({
+      title: '¿Quieres editar este intercambio?',
+      showCancelButton: true,
+      text: 'Se resetearan todos los estatus y se volveran a enviar los correos',
+      confirmButtonText: 'Aceptar',
+      denyButtonText: `Cancelar`,
+    }).then((result) => {
+      if(result.isConfirmed){
+
+        $.ajax({
+          url: `${URI}/api/intercambios/${intercambio_id}`,
+          method: 'PUT',
+          data: json,
+          headers: {
+            'x-access-token': sessionStorage.getItem('token'),
+          },
+          dataType: 'json',
+          success: function (interc) {
+            $.each($('#participantes tr'), function (i, data) {
+                let participante = `{"intercambio":"${
+                  interc._id
+                }","estatus": 1,"nombre":"${data.innerText
+                  .replace('\t', '","email":"')
+                  .replace('\t', '"}')}`
+                  console.log("JSOOOOOOOOOOOOOOOOOOON:",JSON.parse(participante))
+                $.ajax({
+                  url: `${URI}/api/participantes`,
+                  method: 'POST',
+                  data: JSON.parse(participante),
+                  headers: {
+                    'x-access-token': sessionStorage.getItem('token'),
+                  },
+                  dataType: 'json',
+                  success: function (parti) {
+                    console.log(parti)
+                  },
+                })
+              })
+              Swal.fire('Editado!', '', 'success').then((result) => {
+                location.reload()
+              })
+          },
+        }).fail(function (error) {
+          console.log(error.responseJSON)
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops....',
+            text: error.responseJSON.message,
           })
-        Swal.fire('Editado!', '', 'success').then((result) => {
-          location.reload()
         })
-      },
-    }).fail(function (error) {
-      console.log(error.responseJSON)
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops....',
-        text: error.responseJSON.message,
-      })
+   
+      }else{
+        return false
+      }
+     
+      /* Read more about isConfirmed, isDenied below */
+    
     })
+  
   } else {
     //GUARDAR
     $.ajax({
@@ -500,7 +561,7 @@ $('#dateman').click(function () {
   } else {
     Swal.fire({
       icon: 'error',
-      title: 'Fecha vacia',
+      title: 'Fecha vacía',
       text: 'Ingresa una fecha ',
     })
     return false
@@ -512,15 +573,15 @@ function validar() {
     Swal.fire({
       icon: 'error',
       title: 'Intercambio sin nombre',
-      text: 'No puedes cambiar el pasado',
+      text: 'Debes ingresar un nombre',
     })
     err++
   }
   if ($('#montoMaximo').val().length == 0) {
     Swal.fire({
       icon: 'error',
-      title: 'Intercambio sin nombre',
-      text: 'No puedes cambiar el pasado',
+      title: 'Ingresa un monto',
+      text: 'ingresa un monto para tu intercambio',
     })
     err++
   }
@@ -545,6 +606,18 @@ function validar() {
       text: 'Ingresa una fecha ',
     })
     err++
+  }
+  let contador = 0;
+  $.each($('#participantes tr'), function (i, data) {
+    contador ++;
+  })
+  if(contador <3){
+    err++;
+    Swal.fire({
+      icon: 'error',
+      title: 'Pocos participantes',
+      text: 'Ingresa mínimo 3 participantes  ',
+    })
   }
 
   if (err > 0) return false
@@ -574,47 +647,17 @@ function openTab(evt, tabName) {
   $('#tema1').val('')
   $('#tema2').val('')
   $('#tema3').val('')
+  $("#saveInter").hide();
   $('#id_inter').val('')
   $("#participantes").empty()
   $("#nombre").removeAttr("disabled")
   $('#montoMaximo').removeAttr("disabled")
   $('#fechaIntercambio').removeAttr("disabled")
   $('#tema3').removeAttr("disabled")
+  $('#tema1').removeAttr("disabled")
   $('#tema2').removeAttr("disabled")
   $("#datos-part").show();
+  $("#saveInter").show();
 }
 
-//prueba para logica de intercambio
 
-function shuffle(array) {
-  let currentIndex = array.length,
-    randomIndex
-
-  while (currentIndex != 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex--
-
-    ;[array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ]
-  }
-
-  return array
-}
-
-function dont_match(array1, array2) {
-  let cont = 0
-  do {
-    array1 = shuffle(array1)
-    array2 = shuffle(array2)
-    result = array1.map(function (item, i) {
-      return item == array2[i]
-    })
-    cont++
-  } while (result.includes(true))
-  console.log(array1)
-  console.log(array2, `Numero de intentos: ${cont}`)
-}
-
-dont_match([1, 2, 3, 4, 5, 6, 7, 8], [1, 2, 3, 4, 5, 6, 7, 8])

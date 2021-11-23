@@ -1,7 +1,8 @@
 
 var WEB_URI = "https://intercambios-api.herokuapp.com"
 var LOCAL_URI = "http://26.181.53.212:3000"
-var URI = WEB_URI
+var LOCAL_HOST = 'http://localhost:3000'
+var URI = LOCAL_HOST
 $(document).ready(function () {	if(sessionStorage.getItem("token")!=null) location.href = '../dashboard/dashboard.html';})
 
 $('#regresar').click(function () {
@@ -40,8 +41,8 @@ $('#registrar').submit(function (event) {
   ).fail(function (error) {
     Swal.fire({
         icon: 'error',
-        title: 'Oops...',
-        text: error.responseJSON.message
+        title: 'Usuario existente o campos vacíos',
+        text:"Verifica tus datos"
       })
   })
 })
