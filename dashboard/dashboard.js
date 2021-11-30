@@ -51,6 +51,7 @@ $(document).ready(function () {
             <button class="btn eliminar borrar-btn" style='background-color:red;color:white;' id="${data._id}">Borrar</button>
             ${data.estatus==0 ? "": ` <button class="btn editar-btn" id="${data._id}">Editar</button> `}
             <button class="btn ver-btn" id="${data._id}">Ver</button>
+            <button class="btn generar-btn" id="${data._id}">Generar clave</button>
             ${data.estatus==0 ? "": ` <button class="btn iniciar" style='background-color:green;color:white;' id="${data._id}">Iniciar</button> `}
             
         </td>
@@ -80,6 +81,7 @@ $(document).ready(function () {
             <button class="btn eliminar borrar-btn" style='background-color:red;color:white;' id="${data._id}">Borrar</button>
             ${data.estatus==0 ? "": ` <button class="btn editar-btn" id="${data._id}">Editar</button> `}
             <button class="btn ver-btn" id="${data._id}">Ver</button>
+            <button class="btn generar-btn" id="${data._id}">Generar clave</button>
             ${data.estatus==0 ? "": ` <button class="btn iniciar" style='background-color:green;color:white;' id="${data._id}">Iniciar</button> `}
         </td>
         <td>${estatus}</td>
@@ -87,6 +89,7 @@ $(document).ready(function () {
       })
 
       $('.editar-btn').click(function () {
+        
         $.ajax({
           url: `${URI}/api/intercambios/${$(this).attr('id')}`,
           method: 'GET',
@@ -107,6 +110,7 @@ $(document).ready(function () {
 
             $('#montoMaximo').val(response.montoMaximo)
             $('#fechaIntercambio').val(response.fechaIntercambio)
+            
             $('#tema1').val(response.tema1)
             $('#tema2').val(response.tema2)
             $('#tema3').val(response.tema3)
@@ -135,7 +139,19 @@ $(document).ready(function () {
           },
         })
       })
+      $(".generar-btn").click(function(){
 
+        Swal.fire({
+          title: "Cópialo y compartelo!",
+          html: 
+              '<textarea style=" width:100%;"id="text_to_be_copied" class="swal2-input" readonly>https://intercambios-api.herokuapp.com/api/participantes/ver/'+$(this).attr('id')+'</textarea>' ,
+          showConfirmButton: true,
+          confirmButtonText:"Hecho!",
+          type: "success",
+      });
+
+
+      })
       $('.ver-btn').click(function () {
         $.ajax({
           url: `${URI}/api/intercambios/${$(this).attr('id')}`,
@@ -585,7 +601,7 @@ $('#dateman').click(function () {
 })
 function validar() {
   let err = 0
-  if($("#tema3").val() !=0 &&$("#tema3").val()!=0)
+  if(($("#tema3").val() !=0 &&$("#tema2").val()!=0))
   if(($("#tema1").val() == $("#tema2").val()== $("#tema3").val())||($("#tema2").val() == $("#tema1").val())||($("#tema3").val() == $("#tema1").val())||($("#tema3").val() == $("#tema2").val())){
 
     Swal.fire({
