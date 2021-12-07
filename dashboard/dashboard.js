@@ -223,6 +223,7 @@ $(document).ready(function () {
                                                 <td>${r.nombre}</td>
                                                 <td>${r.email}</td>
                                                 <td ${color}>${estatus}</td>
+                                                <td>${temas(r.tema)}</td>
                                             </tr>`)
                 },
               })
@@ -381,6 +382,8 @@ function  temas(tema) {
      case 9:
       return "Camisas"
      break;
+     case 10:
+       return "Sin definir"
      
      default:
        return "libre";
